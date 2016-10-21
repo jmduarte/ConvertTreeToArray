@@ -33,13 +33,20 @@ def convertToTree (name, train) :
 #Tuple = Tuple[~(Tuple['Jet_flavour']==2)]
 
     Jet_flavour =Tuple['Jet_flavour']
+    Jet_nbHadrons =Tuple['Jet_nbHadrons']
+    Jet_cbHadrons =Tuple['Jet_ncHadrons']
+
     # adds getting the truth from flavor
-    Y = abs(Jet_flavour)==5
-    NoY =  abs(Jet_flavour)!=5
-    noY = 1.*NoY# converts bool to float
+    Y = Jet_nbHadrons  == 1
+   # NoY =  Jet_nbHadrons !=1
+   # noY = 1.*NoY# converts bool to float
     yesy =1.*Y # converts bool to float
     Cs = abs(Jet_flavour)==4
     Cs_float = 1.*Cs
+    Csplit = 1*(Jet_cbHadrons>1)
+    Csingle = 1*(Jet_cbHadrons==1)
+    Csingle = numpy.multiply(Cs_float,Csingle)
+    Csplit= numpy.multiply(Cs_float,Csplit)
     U =  abs(Jet_flavour) == 1
     D =  abs(Jet_flavour) == 2
     S =  abs(Jet_flavour) == 3
@@ -47,13 +54,15 @@ def convertToTree (name, train) :
     Light = [U,D,S,G]
     Light_sum = numpy.sum(Light,axis = 0)
     Light_sum_float = Light_sum*1
+    
+    splitb = 1*(Jet_nbHadrons  > 1)
 #yesy.reshape(1,len(yesy))
-    y = numpy.column_stack((yesy,noY,Cs_float ,Light_sum_float))
+    y = numpy.column_stack((yesy, Csingle,Light_sum_float,splitb,Csplit))
     y = y.astype('float32')
     #print 'y shape ' , y.shape, ' other shapes ',  noY.shape , ' ' , yesy.shape
     #print y
 #x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_genpt','Jet_phi','Jet_mass','Jet_flavour','Jet_nbHadrons','Jet_JP','Jet_JBP','Jet_CSV','Jet_CSVIVF'])
-    x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_flavour','Jet_nbHadrons','Jet_cbHadrons','Jet_CSV'])
+    x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_flavour','Jet_nbHadrons','Jet_ncHadrons','Jet_CSV'])
 #x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_genpt','Jet_phi','Jet_mass','Jet_flavour','Jet_nbHadrons','Jet_CSV'])
 #    mynames = x.dtype.names
 #    print 'number of branches ', len(mynames) 
@@ -68,6 +77,5 @@ def convertToTree (name, train) :
         numpy.save(name+"_Y.npy", y)
 
 
-
-convertToTree("QCD2C_train",train=True)
-convertToTree("QCD2C_test",train=False)
+convertToTree("allMix_train2",train=True)
+convertToTree("allMix_test2",train=False)
