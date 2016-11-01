@@ -6,7 +6,7 @@ import ROOT
 def convertToTree (name, train) :
     rfile = ROOT.TFile(name+".root")
     print 'Converting', name+".root", " to ",name+".npy"
-    tree = rfile.Get("ttree")
+    tree = rfile.Get("tagVars/ttree")
 #tree.Show(5)
     from root_numpy import tree2array
     import numpy
@@ -77,5 +77,5 @@ def convertToTree (name, train) :
         numpy.save(name+"_Y.npy", y)
 
 
-convertToTree("allMix_train2",train=True)
-convertToTree("allMix_test2",train=False)
+#convertToTree("allMi",train=True)
+convertToTree("JetTaggingVariablesQCD50to80",train=False)
