@@ -8,7 +8,8 @@ import sys
 if(len(sys.argv)!=3):
     print 'please give input path and output file name'
 
-print 'converting: ' , sys.argv[1], ' to ' ,myarray,sys.argv[2]
+print 'converting: ' , sys.argv[1], ' to ' ,sys.argv[2]
 myarray = numpy.load(sys.argv[1])
+
 #print myarray
 array2root(myarray,sys.argv[2],mode="recreate")
