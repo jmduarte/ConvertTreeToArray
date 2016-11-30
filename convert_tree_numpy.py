@@ -1,12 +1,12 @@
 import ROOT
-#rfile = ROOT.TFile("/afs/cern.ch/work/m/mstoye/DeepBs/CMSSW_8_0_12/src/RecoBTag/TagVarExtractor/test/JetTaggingVariables.root")
-#tree = rfile.Get("tagVars/ttree")
 
+#rfile = ROOT.TFile("/afs/cern.ch/work/m/mstoye/DeepBs/CMSSW_8_0_12/src/RecoBTag/TagVarExtractor/test/JetTaggingVariables.root")
+#tree = rfile.Get("ttree")
 
 def convertToTree (name, train) :
     rfile = ROOT.TFile(name+".root")
     print 'Converting', name+".root", " to ",name+".npy"
-    tree = rfile.Get("tagVars/ttree")
+    tree = rfile.Get("ttree")
 #tree.Show(5)
     from root_numpy import tree2array
     import numpy
@@ -21,16 +21,6 @@ def convertToTree (name, train) :
         numpy.random.shuffle(Tuple)
         numpy.random.shuffle(Tuple)
         print ' reshuffeled ', Tuple
-
-#    print ' the following is input to x'
-#    for index, Names in enumerate(BranchList):
-#        print 'arrray',index, ' :' , Names
-# jet cleaning
-#Jet_flavour_c =Tuple['Jet_flavour']
-#for i in range (Tuple.shape[0]):
-#    if abs(Jet_flavour_c[i]) == 4:
-#        Tuple = numpy.delete(Tuple,(i),axis=0)
-#Tuple = Tuple[~(Tuple['Jet_flavour']==2)]
 
     Jet_flavour =Tuple['Jet_flavour']
     Jet_nbHadrons =Tuple['Jet_nbHadrons']
@@ -63,19 +53,14 @@ def convertToTree (name, train) :
     #print y
 #x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_genpt','Jet_phi','Jet_mass','Jet_flavour','Jet_nbHadrons','Jet_JP','Jet_JBP','Jet_CSV','Jet_CSVIVF'])
     x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_flavour','Jet_nbHadrons','Jet_ncHadrons','Jet_CSV'])
-#x = numpy.lib.recfunctions.drop_fields(Tuple,['Jet_genpt','Jet_phi','Jet_mass','Jet_flavour','Jet_nbHadrons','Jet_CSV'])
-#    mynames = x.dtype.names
-#    print 'number of branches ', len(mynames) 
-#    for index , name in enumerate(mynames):
-#        print 'branch index: ' ,index, ' , branch name: ',name
 
     if(train):
         numpy.save(name+"_X.npy", x)
         numpy.save(name+"_Y.npy", y)
     else:
-        numpy.save(name+"_X.npy", x)
-        numpy.save(name+"_Y.npy", y)
+        numpy.save(name+"_test_X.npy", x)
+        numpy.save(name+"_test_Y.npy", y)
 
 
 #convertToTree("allMi",train=True)
-convertToTree("JetTaggingVariablesQCD50to80",train=False)
+#convertToTree("QCDflat",train=True)
